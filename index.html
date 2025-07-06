@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Emergency QR Generator</title>
+  <script src="qrcode.min.js"></script>
+  <style>
+  body {
+    font-family: sans-serif;
+    padding: 2em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    text-align: center;
+    background: #f9f9f9;
+  }
+
+  form {
+    max-width: 500px;
+    width: 100%;
+  }
+
+  input {
+    width: 100%;
+    margin-bottom: 1em;
+    padding: 0.5em;
+    font-size: 1em;
+  }
+
+  #qrcode {
+    margin-top: 20px;
+  }
+
+  button {
+    margin: 10px 5px;
+    padding: 0.6em 1.2em;
+    font-size: 1em;
+    cursor: pointer;
+  }
+  </style>
+</head>
+<body>
+
+  <h3>Emergency QR Generator</h3>
+
+  <form id="quizForm" onsubmit="event.preventDefault(); generateQR();">
+
+    <label>Full Name:</label><br>
+    <input type="text" id="name"><br>
+
+    <label>Class / Roll No.:</label><br>
+    <input type="text" id="classroll"><br>
+
+    <label>Emergency Contact:</label><br>
+    <input type="text" id="contact"><br>
+
+    <label>Guardian Name:</label><br>
+    <input type="text" id="guardian"><br>
+
+    <label>Guardian Contact:</label><br>
+    <input type="text" id="guardianContact"><br>
+
+    <label>Blood Group:</label><br>
+    <input type="text" id="blood"><br>
+
+    <label>Allergies:</label><br>
+    <input type="text" id="allergies"><br>
+
+    <label>Medical Conditions:</label><br>
+    <input type="text" id="conditions"><br>
+
+    <label>Current Medications:</label><br>
+    <input type="text" id="medications"><br>
+
+    <label>Address:</label><br>
+    <input type="text" id="address"><br>
+
+    <label>Languages Spoken:</label><br>
+    <input type="text" id="languages"><br>
+
+    <label>Emergency Notes:</label><br>
+    <input type="text" id="notes"><br>
+
+    <label>Height:</label><br>
+    <input type="text" id="height"><br>
+
+    <label>Weight:</label><br>
+    <input type="text" id="weight"><br>
+
+    <button type="submit">Generate QR</button>
+  </form>
+
+  <button id="saveBtn" onclick="saveQR()" style="display: none;">Save QR Image</button>
+  <div id="qrcode"></div>
+
+  <script>
+    let qr;
+
+    function generateQR() {
+      const fields = [
+        { label: 'Name', id: 'name' },
+        { label: 'Class/Roll', id: 'classroll' },
+        { label: 'Emergency Contact', id: 'contact' },
+        { label: 'Guardian', id: 'guardian' },
+        { label: 'Guardian Contact', id: 'guardianContact' },
+        { label: 'Blood Group', id: 'blood' },
+        { label: 'Allergies', id: 'allergies' },
+        { label: 'Conditions', id: 'conditions' },
+        { label: 'Medications', id: 'medications' },
+        { label: 'Address', id: 'address' },
+        { label: 'Languages', id: 'languages' },
+        { label: 'Notes', id: 'notes' },
+        { label: 'Height', id: 'height' },
+        { label: 'Weight', id: 'weight' }
+      ];
+
+      let qrText = '';
+      fields.forEach(field => {
+        const value = document.getElementById(field.id).value.trim();
+        if (value) {
+          qrText += `${field.label}: ${value}\n`;
+        }
+      });
+
+      document.getElementById('qrcode').innerHTML = '';
+      qr = new QRCode(document.getElementById("qrcode"), {
+        text: qrText.trim(),
+        width: 256,
+        height: 256
+      });
+
+      document.getElementById('saveBtn').style.display = 'inline-block';
+    }
+
+    function saveQR() {
+      const img = document.querySelector('#qrcode img');
+      if (!img) return;
+      const a = document.createElement('a');
+      a.href = img.src;
+      a.download = 'emergency_qr.png';
+      a.click();
+    }
+  </script>
+
+</body>
+</html>
