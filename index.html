@@ -4,89 +4,125 @@
   <meta charset="UTF-8">
   <title>Emergency QR Generator</title>
   <script src="qrcode.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
   <style>
-  body {
-    font-family: sans-serif;
-    padding: 2em;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    min-height: 100vh;
-    text-align: center;
-    background: #f9f9f9;
-  }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Nunito', sans-serif;
+    }
+    body {
+      font-family: sans-serif;
+      padding: 2em;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      text-align: center;
+      background: #f9f9f9;
+      transition: background 0.3s, color 0.3s;
+    }
 
-  form {
-    max-width: 500px;
-    width: 100%;
-  }
+    body.dark-mode {
+      background: #333;
+      color: #f9f9f9;
+    }
 
-  input {
-    width: 100%;
-    margin-bottom: 1em;
-    padding: 0.5em;
-    font-size: 1em;
-  }
+    form {
+      max-width: 500px;
+      width: 100%;
+    }
 
-  #qrcode {
-    margin-top: 20px;
-  }
+    input {
+      width: 100%;
+      margin-bottom: 1em;
+      padding: 0.5em;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
 
-  button {
-    margin: 10px 5px;
-    padding: 0.6em 1.2em;
-    font-size: 1em;
-    cursor: pointer;
-  }
+    #qrcode {
+      margin-top: 20px;
+    }
+
+    button {
+      margin: 10px 5px;
+      padding: 0.6em 1.2em;
+      font-size: 1em;
+      cursor: pointer;
+    }
+
+    select {
+      margin: 10px;
+      padding: 0.5em;
+    }
   </style>
 </head>
 <body>
 
   <h3>Emergency QR Generator</h3>
 
+  <div>
+    <label for="mode">Mode:</label>
+    <select id="mode" onchange="toggleMode()">
+      <option value="light">Light</option>
+      <option value="dark">Dark</option>
+    </select>
+
+    <label for="language">Language:</label>
+    <select id="language" onchange="switchLanguage()">
+      <option value="en">English</option>
+      <option value="hi">Hindi</option>
+    </select>
+  </div>
+
   <form id="quizForm" onsubmit="event.preventDefault(); generateQR();">
 
-    <label>Full Name:</label><br>
+    <label id="name-label">Full Name:</label><br>
     <input type="text" id="name"><br>
 
-    <label>Class / Roll No.:</label><br>
+    <label id="classroll-label">Class / Roll No.:</label><br>
     <input type="text" id="classroll"><br>
 
-    <label>Emergency Contact:</label><br>
+    <label id="contact-label">Emergency Contact:</label><br>
     <input type="text" id="contact"><br>
 
-    <label>Guardian Name:</label><br>
+    <label id="guardian-label">Guardian Name:</label><br>
     <input type="text" id="guardian"><br>
 
-    <label>Guardian Contact:</label><br>
+    <label id="guardianContact-label">Guardian Contact:</label><br>
     <input type="text" id="guardianContact"><br>
 
-    <label>Blood Group:</label><br>
+    <label id="blood-label">Blood Group:</label><br>
     <input type="text" id="blood"><br>
 
-    <label>Allergies:</label><br>
+    <label id="allergies-label">Allergies:</label><br>
     <input type="text" id="allergies"><br>
 
-    <label>Medical Conditions:</label><br>
+    <label id="conditions-label">Medical Conditions:</label><br>
     <input type="text" id="conditions"><br>
 
-    <label>Current Medications:</label><br>
+    <label id="medications-label">Current Medications:</label><br>
     <input type="text" id="medications"><br>
 
-    <label>Address:</label><br>
+    <label id="address-label">Address:</label><br>
     <input type="text" id="address"><br>
 
-    <label>Languages Spoken:</label><br>
+    <label id="languages-label">Languages Spoken:</label><br>
     <input type="text" id="languages"><br>
 
-    <label>Emergency Notes:</label><br>
+    <label id="notes-label">Emergency Notes:</label><br>
     <input type="text" id="notes"><br>
 
-    <label>Height:</label><br>
+    <label id="height-label">Height:</label><br>
     <input type="text" id="height"><br>
 
-    <label>Weight:</label><br>
+    <label id="weight-label">Weight:</label><br>
     <input type="text" id="weight"><br>
 
     <button type="submit">Generate QR</button>
@@ -141,6 +177,57 @@
       a.href = img.src;
       a.download = 'emergency_qr.png';
       a.click();
+    }
+
+    function toggleMode() {
+      const mode = document.getElementById('mode').value;
+      if (mode === 'dark') {
+        document.body.classList.add('dark-mode');
+      } else {
+        document.body.classList.remove('dark-mode');
+      }
+    }
+
+    function switchLanguage() {
+      const language = document.getElementById('language').value;
+      const labels = {
+        en: {
+          'name-label': 'Full Name:',
+          'classroll-label': 'Class / Roll No.:',
+          'contact-label': 'Emergency Contact:',
+          'guardian-label': 'Guardian Name:',
+          'guardianContact-label': 'Guardian Contact:',
+          'blood-label': 'Blood Group:',
+          'allergies-label': 'Allergies:',
+          'conditions-label': 'Medical Conditions:',
+          'medications-label': 'Current Medications:',
+          'address-label': 'Address:',
+          'languages-label': 'Languages Spoken:',
+          'notes-label': 'Emergency Notes:',
+          'height-label': 'Height:',
+          'weight-label': 'Weight:'
+        },
+        hi: {
+          'name-label': 'पूरा नाम:',
+          'classroll-label': 'कक्षा / रोल नंबर:',
+          'contact-label': 'आपातकालीन संपर्क:',
+          'guardian-label': 'अभिभावक का नाम:',
+          'guardianContact-label': 'अभिभावक संपर्क:',
+          'blood-label': 'रक्त समूह:',
+          'allergies-label': 'एलर्जी:',
+          'conditions-label': 'चिकित्सा स्थितियां:',
+          'medications-label': 'वर्तमान दवाएं:',
+          'address-label': 'पता:',
+          'languages-label': 'बोली जाने वाली भाषाएँ:',
+          'notes-label': 'आपातकालीन नोट्स:',
+          'height-label': 'ऊँचाई:',
+          'weight-label': 'वज़न:'
+        }
+      };
+
+      Object.keys(labels[language]).forEach(id => {
+        document.getElementById(id).textContent = labels[language][id];
+      });
     }
   </script>
 
